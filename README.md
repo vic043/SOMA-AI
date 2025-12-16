@@ -1,7 +1,3 @@
-# SOMA-AIPerfect, Victor 👌. Let’s put together a **README** and **Documentation** for your simple AI Tutor project. I’ll keep it clear, structured, and professional so you can drop it straight into your repo.
-
----
-
 # 📘 README.md
 
 ```markdown
@@ -171,11 +167,3 @@ Future extension: IndexedDB for storing multiple Q&A pairs.
 - Students from nursery to university.
 - Educators seeking inclusive digital tools.
 
----
-```
-
----
-
-This gives you both a **README.md** for GitHub and a **Documentation.md** for deeper technical details.  
-
-Would you like me to also **add example screenshots/wireframes** (in Markdown placeholders) so your repo looks more polished?
