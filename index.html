@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple AI Tutor</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    h1 {
+      color: #667eea;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2.5em;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 600;
+      font-size: 0.95em;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 5px;
+      font-size: 1em;
+      transition: border-color 0.3s;
+    }
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    #language {
+      margin-bottom: 15px;
+    }
+
+    #question {
+      margin-bottom: 20px;
+      resize: vertical;
+      min-height: 50px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    #answer {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f5f5f5;
+      border-left: 4px solid #667eea;
+      border-radius: 5px;
+      line-height: 1.6;
+      color: #333;
+      min-height: 50px;
+      display: none;
+    }
+
+    #answer:not(:empty) {
+      display: block;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 2em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AI Tutor</h1>
+    <div class="form-group">
+      <label for="language">Select Language:</label>
+      <select id="language">
+        <option value="en">English</option>
+        <option value="sw">Swahili</option>
+        <option value="ki">Kikuyu</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="question">Ask a Question:</label>
+      <input id="question" placeholder="Ask a question..." />
+    </div>
+    <button onclick="askTutor()">Ask</button>
+    <p id="answer"></p>
+  </div>
+
+  <script>
+    async function askTutor() {
+      const q = document.getElementById("question").value;
+      const lang = document.getElementById("language").value;
+      const answerElement = document.getElementById("answer");
+
+      if (!q.trim()) {
+        answerElement.innerText = "Please enter a question!";
+        return;
+      }
+
+      answerElement.innerText = "Loading...";
+
+      try {
+        const res = await fetch("/ask", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({question: q, language: lang})
+        });
+        const data = await res.json();
+        answerElement.innerText = data.answer;
+      } catch (error) {
+        // Fallback: Generate a sample response
+        const responses = {
+          en: `This is a great question! Here's what I can tell you about "${q}": This is a demo response. To get real AI responses, you need to connect this to a backend API server.`,
+          sw: `Hii ni swali nzuri! Hapa kuna kile ninachoweza kukuambia kuhusu "${q}": Hii ni jibu la demo.`,
+          ki: `Wĩ ũrĩa mwega mũno! Nĩ ũrĩ ũrĩa njĩ nĩngĩkũhe ihoya kuhusu "${q}": Ĩyo nĩ jibu rĩa demo.`
+        };
+        answerElement.innerText = responses[lang] || responses['en'];
+      }
+    }
+  </script>
+</body>
+</html>
+
